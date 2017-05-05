@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket Controller Lite</title>
+  <style>
+	 table { border-collapse: collapse; text-align:center; width: 60%; border-radius: 30px; margin:50px;}  {font: normal 14px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 3px solid #006699; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; } table td,  table th { padding: 5px 10px; } table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; }  table thead th:first-child { border: none; } table tr td { color: #00557F; border-left: 1px solid #E1EEF4;font-size: 16px;border-bottom: 1px solid #E1EEF4;font-weight: normal; }
+	  table tr:nth-child(n+5) { background: #E1EEf4; color: #00557F;} 
+	  table tr:nth-child(n+8) { background: white; color: #00557F; } 
+	  table tr:nth-child(n+11) { background: #E1EEf4; color: #00557F;} 
+	  table tr td:first-child { border-left: none; } table tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+<center>
+<table width="60%">
+  <thead>
+	<th> Name </th>  <th>Value</th>  <th>Bar</th>
+  </thead>
+  <tr>
+	<td> Roll </td> <td id="roll">-221b</td>
+  </tr>
+  <tr>
+	<td> Pitch </td>  <td id="pitch">-221b</td>
+  </tr>
+  <tr>
+	<td> Yaw </td>  <td id="yaw">-221b</td>
+  </tr>
+  <tr>
+	<td> Throttle </td>  <td id="throttle">-221b</td>
+  </tr>
+  
+  <tr>
+	<td>ang_x </td>  <td id="ang_x">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+	<td>ang_y </td>  <td id="ang_y">-221b</td>  <td>None</td>
+  </tr>
+  
+  <tr>
+	<td>heading </td>  <td id="heading">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+	<td>gyro_x </td>  <td id="gyro_x">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+	<td>gyro_y </td>  <td id="gyro_y">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+	<td>gyro_z </td>  <td id="gyro_z">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+	<td>acc_x </td>  <td id="acc_x">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+	<td>acc_y </td>  <td id="acc_y">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+	<td>acc_z </td>  <td id="acc_z">-221b</td>  <td>None</td>
+  </tr>
+  <tr>
+  	<td>motor_1 </td> <td id="motor_1">-221b</td> <td>None</td>
+  </tr>
+  <tr>
+  	<td>motor_2 </td> <td id="motor_2">-221b</td> <td>None</td>
+  </tr>
+  <tr>
+  	<td>motor_3 </td> <td id="motor_3">-221b</td> <td>None</td>
+  </tr>
+  <tr>
+  	<td>motor_4 </td> <td id="motor_4">-221b</td> <td>None</td>
+  </tr>
+  <tr>
+	<td>ARMED </td> <td id="armed">-221b</td> <td>None</td>
+  </tr>
+
+</table>
+<button onclick="arm()">Arm</button>
+<button onclick="disarm()">DisArm</button>
+</center>
+
+<script src="./socket.io.js"></script>
+<script src="./jquery-1.7.1.min.js"></script>
+<script>
+  var socket = io();
+  var dt = "";
+  
+  var roll = document.getElementById('roll');
+  var yaw = document.getElementById('yaw');
+  var pitch = document.getElementById('pitch');
+  var throttle = document.getElementById('throttle');
+  var acc_x = document.getElementById('acc_x');
+  var acc_y = document.getElementById('acc_y');
+  var acc_z = document.getElementById('acc_z');
+  var gyro_x = document.getElementById('gyro_x');
+  var gyro_y = document.getElementById('gyro_y');
+  var gyro_z = document.getElementById('gyro_z');
+  var motor_1 = document.getElementById('motor_1');
+  var motor_2 = document.getElementById('motor_2');
+  var motor_3 = document.getElementById('motor_3');
+  var motor_4 = document.getElementById('motor_4');
+  var ang_x = document.getElementById('ang_x');
+  var ang_y = document.getElementById('ang_y');
+  var heading = document.getElementById('heading');
+  var armed = document.getElementById('armed');
+
+  var throttle_value = document.getElementById('throttle_value');
+  var yaw_value = document.getElementById('yaw_value');
+
+  socket.emit("connection" , {"user_connected" : "hi"});
+
+  socket.on("read_message" , function(msg){
+	
+	var data = JSON.parse(JSON.parse(msg));
+	roll.innerHTML = data.roll ; 
+	yaw.innerHTML = data.yaw ; 
+	pitch.innerHTML = data.pitch ; 
+	throttle.innerHTML = data.throttle ; 
+	acc_x.innerHTML = data.ax ; 
+	acc_y.innerHTML = data.ay ; 
+	acc_z.innerHTML = data.az ; 
+	gyro_x.innerHTML = data.gx ; 
+	gyro_y.innerHTML = data.gy ; 
+	gyro_z.innerHTML = data.gz ; 
+	motor_1.innerHTML = data.motor_1 ; 
+	motor_2.innerHTML = data.motor_2 ; 
+	motor_3.innerHTML = data.motor_3 ; 
+	motor_4.innerHTML = data.motor_4 ; 
+	ang_x.innerHTML = data.angx ; 
+	ang_y.innerHTML = data.angy ; 
+	heading.innerHTML = data.heading ;
+	armed.innerHTML = data.status ;    
+  });
+
+  function arm() {
+    socket.emit("write_message" , "arm" );  
+  }
+
+  function disarm() {
+    socket.emit("write_message" , "disarm" );  
+  }  
+</script>
+</body>
+</html>
