@@ -1,0 +1,7 @@
+terminal 1:
+	cd Socket Controller/
+	sudo nodejs socketcontroller.js
+
+terminal 2:
+	cd Py-MultiWii
+	python a.py
